@@ -1,0 +1,39 @@
+<% layout("layouts/boilerplate", { title: "Create Listing" }) -%>
+
+<h1>Create a new listing</h1>
+
+<form action="/listings" method="POST" enctype="multipart/form-data" class="form">
+  <label>Title</label>
+  <input name="listing[title]" required minlength="3">
+
+  <label>Description</label>
+  <textarea name="listing[description]" required minlength="10"></textarea>
+
+  <label>Price per night</label>
+  <input type="number" name="listing[price]" min="0" required>
+
+  <label>Location</label>
+  <input name="listing[location]" placeholder="e.g. Connaught Place" required>
+
+  <label>Country</label>
+  <input name="listing[country]" placeholder="e.g. India" required>
+
+  <label>Category</label>
+  <select name="listing[category]" required>
+    <option>Trending</option>
+    <option>Rooms</option>
+    <option>Mountains</option>
+    <option>Arctic</option>
+    <option>Camping</option>
+    <option>Beach</option>
+    <option>City</option>
+    <option>Farms</option>
+  </select>
+
+  <label>Image</label>
+  <input id="imageInput" type="file" name="image" accept="image/*" required>
+
+  <img id="imagePreview" class="preview hidden" alt="Image preview">
+
+  <button type="submit">Create Listing</button>
+</form>

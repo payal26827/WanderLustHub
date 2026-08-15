@@ -1,0 +1,57 @@
+<!-- <nav class="navbar">
+  <a class="brand" href="/listings">Wanderlust</a>
+
+  <form class="search" action="/listings" method="GET">
+    <input
+  name="search"
+  placeholder="Search destinations..."
+  value="<%= typeof filters !== 'undefined' ? (filters.search || '') : '' %>"
+>
+    <button type="submit">🔍</button>
+  </form>
+
+  <div class="nav-links">
+    <a href="/listings">Explore</a>
+
+    <% if (currentUser) { %>
+      <a href="/listings/new">Create Listing</a>
+      <form action="/logout" method="POST" class="inline">
+        <button class="link-button" type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign up</a>
+    <% } %>
+  </div>
+</nav> -->
+
+
+
+<nav class="navbar">
+  <a class="brand" href="/listings">Wanderlust</a>
+
+  <form class="search" action="/listings" method="GET">
+    <input
+      name="search"
+      placeholder="Search destinations..."
+      value="<%= typeof filters !== 'undefined' ? (filters.search || '') : '' %>"
+    >
+    <button type="submit">🔍</button>
+  </form>
+
+  <div class="nav-links">
+    <a href="/listings">Explore</a>
+
+    <% if (currentUser) { %>
+      <a href="/listings/new">Create Listing</a>
+
+      <form action="/logout" method="POST" class="inline">
+        <button class="link-button" type="submit">Logout</button>
+      </form>
+
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/signup">Sign up</a>
+    <% } %>
+  </div>
+</nav>

@@ -1,0 +1,66 @@
+<% layout("layouts/boilerplate", { title: "All Listings" }) -%>
+
+<div class="hero">
+  <h1>Explore stays</h1>
+  <p>Find a place you will love.</p>
+</div>
+
+<div class="filters">
+  <% const categories = ["All","Trending","Rooms","Mountains","Arctic","Camping","Beach","City","Farms"]; %>
+
+  <% categories.forEach(cat => { %>
+    <a
+      class="<%= (filters.category || "All") === cat ? "active-filter" : "" %>"
+      href="/listings?category=<%= encodeURIComponent(cat) %>"
+    >
+      <%= cat %>
+    </a>
+  <% }) %>
+</div>
+
+<div class="filter-box">
+  <form action="/listings" method="GET">
+    <input type="hidden" name="category" value="<%= filters.category || "All" %>">
+    <input type="number" name="minPrice" placeholder="Min price" value="<%= filters.minPrice || "" %>">
+    <input type="number" name="maxPrice" placeholder="Max price" value="<%= filters.maxPrice || "" %>">
+    <button type="submit">Apply</button>
+  </form>
+
+  <form action="/listings/tax" method="POST">
+    <button type="submit">
+      Tax: <%= taxMode ? "ON" : "OFF" %>
+    </button>
+  </form>
+</div>
+
+<div class="cards">
+  <% listings.forEach(listing => { %>
+    <a class="card" href="/listings/<%= listing._id %>">
+      <img
+        src="<%= listing.image?.url || 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80' %>"
+        alt="<%= listing.title %>"
+      >
+
+      <div class="card-body">
+        <h3><%= listing.title %></h3>
+        <p><%= listing.location %>, <%= listing.country %></p>
+
+        <p class="price">
+          ₹<%= listing.price.toLocaleString("en-IN") %> / night
+          <% if (taxMode) { %>
+            <span class="tax-text">
+              + ₹<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %> tax
+            </span>
+          <% } %>
+        </p>
+      </div>
+    </a>
+  <% }) %>
+</div>
+
+<% if (!listings.length) { %>
+  <div class="empty">
+    <h2>No listings found</h2>
+    <p>Try another search or filter.</p>
+  </div>
+<% } %>

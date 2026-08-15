@@ -1,0 +1,538 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f8f7ff, #fff7f9, #fffdf4);
+  color: #222;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+  min-height: 70px;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 5%;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 3px 15px rgba(80, 50, 150, 0.08);
+}
+
+.brand {
+  font-size: 27px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #5b2cff, #e83e8c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ================= SEARCH ================= */
+
+.search {
+  display: flex;
+  flex: 1;
+  max-width: 600px;
+}
+
+.search input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 28px 0 0 28px;
+  padding: 13px 18px;
+  background: white;
+  outline: none;
+  font-size: 14px;
+}
+
+.search input:focus {
+  border-color: #8b5cf6;
+}
+
+.search button {
+  width: 55px;
+  border: none;
+  border-radius: 0 28px 28px 0;
+  background: linear-gradient(135deg, #6d28d9, #ec4899);
+  color: white;
+  font-size: 18px;
+}
+
+/* ================= NAV LINKS ================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-links a {
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: #7c3aed;
+}
+
+/* ================= MAIN CONTAINER ================= */
+
+.container {
+  width: min(1200px, 92%);
+  margin: 30px auto;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  padding: 25px 0 20px;
+}
+
+.hero h1 {
+  font-size: 46px;
+  margin-bottom: 8px;
+
+  background: linear-gradient(
+    90deg,
+    #4f46e5,
+    #9333ea,
+    #ec4899,
+    #f97316
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 19px;
+  color: #34345a;
+  font-weight: 500;
+}
+
+/* ================= FILTER CATEGORIES ================= */
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.filters a {
+  padding: 10px 18px;
+  border-radius: 25px;
+  background: white;
+  border: 1px solid #eee;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+}
+
+.filters a:hover {
+  transform: translateY(-2px);
+}
+
+/* ALL */
+
+.filters a:nth-child(1) {
+  background: linear-gradient(135deg, #6d28d9, #ec4899);
+  color: white;
+  border: none;
+}
+
+/* TRENDING */
+
+.filters a:nth-child(2) {
+  color: #f97316;
+}
+
+.filters a:nth-child(2):hover {
+  background: #fff3e8;
+}
+
+/* ROOMS */
+
+.filters a:nth-child(3) {
+  color: #2563eb;
+}
+
+.filters a:nth-child(3):hover {
+  background: #eff6ff;
+}
+
+/* MOUNTAINS */
+
+.filters a:nth-child(4) {
+  color: #16a34a;
+}
+
+.filters a:nth-child(4):hover {
+  background: #ecfdf5;
+}
+
+/* ARCTIC */
+
+.filters a:nth-child(5) {
+  color: #0891b2;
+}
+
+.filters a:nth-child(5):hover {
+  background: #ecfeff;
+}
+
+/* CAMPING */
+
+.filters a:nth-child(6) {
+  color: #ea580c;
+}
+
+.filters a:nth-child(6):hover {
+  background: #fff7ed;
+}
+
+/* BEACH */
+
+.filters a:nth-child(7) {
+  color: #0284c7;
+}
+
+.filters a:nth-child(7):hover {
+  background: #e0f2fe;
+}
+
+/* CITY */
+
+.filters a:nth-child(8) {
+  color: #7c3aed;
+}
+
+.filters a:nth-child(8):hover {
+  background: #f5f3ff;
+}
+
+/* FARMS */
+
+.filters a:nth-child(9) {
+  color: #16a34a;
+}
+
+.filters a:nth-child(9):hover {
+  background: #f0fdf4;
+}
+
+.active-filter {
+  background: linear-gradient(135deg, #6d28d9, #ec4899) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* ================= PRICE FILTER ================= */
+
+.filter-box {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filter-box form {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-box input {
+  padding: 11px 14px;
+  width: 140px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  background: white;
+}
+
+.filter-box input:focus {
+  border-color: #8b5cf6;
+}
+
+/* ================= BUTTONS ================= */
+
+button,
+.button {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 17px;
+  background: linear-gradient(135deg, #6d28d9, #ec4899);
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+button:hover,
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(124, 58, 237, 0.25);
+}
+
+/* ================= LISTING CARDS ================= */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(50, 30, 100, 0.10);
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 12px 30px rgba(70, 40, 150, 0.18);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  transition: 0.3s;
+}
+
+.card:hover img {
+  transform: scale(1.03);
+}
+
+/* ================= CARD BODY ================= */
+
+.card-body {
+  padding: 16px;
+}
+
+.card-body h3 {
+  margin-top: 0;
+  color: #17174b;
+}
+
+.price {
+  font-weight: 700;
+  font-size: 18px;
+  color: #6d28d9;
+}
+
+.tax-text {
+  font-size: 12px;
+  color: #777;
+  font-weight: normal;
+}
+
+/* ================= FORM ================= */
+
+.form {
+  max-width: 650px;
+  display: grid;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.form input,
+.form textarea,
+.form select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  outline: none;
+  background: white;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* ================= IMAGES ================= */
+
+.preview,
+.edit-image {
+  width: 300px;
+  max-width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  margin: 10px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ================= SHOW PAGE ================= */
+
+.show-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 30px;
+}
+
+.show-image {
+  width: 100%;
+  max-height: 600px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.show-content {
+  padding: 15px 0;
+}
+
+.badge {
+  background: linear-gradient(135deg, #ede9fe, #fce7f3);
+  color: #6d28d9;
+  padding: 7px 12px;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.danger {
+  background: #dc2626;
+}
+
+.small {
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+.inline {
+  display: inline;
+}
+
+.link-button {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* ================= REVIEWS ================= */
+
+.reviews {
+  display: grid;
+  gap: 15px;
+}
+
+.review {
+  background: white;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stars {
+  letter-spacing: 2px;
+  color: #f59e0b;
+}
+
+/* ================= FLASH MESSAGE ================= */
+
+.flash {
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.success {
+  background: linear-gradient(90deg, #dcfce7, #d1fae5);
+  color: #166534;
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ================= MAP ================= */
+
+#map {
+  width: 100%;
+  height: 430px;
+  border-radius: 18px;
+}
+
+/* ================= EMPTY / ERROR ================= */
+
+.empty,
+.error-page {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+  padding: 35px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  margin-top: 60px;
+  background: white;
+  color: #555;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+  .navbar,
+  .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .show-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
