@@ -1,16 +1,126 @@
-<% layout("layouts/boilerplate", { title: "Sign Up" }) -%>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Create Account</h1>
+<head>
 
-<form action="/signup" method="POST" class="form">
-  <label>Username</label>
-  <input name="username" required minlength="3">
+    <meta charset="UTF-8">
 
-  <label>Email</label>
-  <input type="email" name="email" required>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-  <label>Password</label>
-  <input type="password" name="password" required minlength="6">
+    <title>Sign Up</title>
 
-  <button type="submit">Sign Up</button>
-</form>
+</head>
+
+
+<body>
+
+    <h1>Create Account</h1>
+
+
+    <!-- FLASH ERROR -->
+
+    <% if (error && error.length > 0) { %>
+
+        <div style="color:red;">
+            <%= error[0] %>
+        </div>
+
+    <% } %>
+
+
+    <!-- FLASH SUCCESS -->
+
+    <% if (success && success.length > 0) { %>
+
+        <div style="color:green;">
+            <%= success[0] %>
+        </div>
+
+    <% } %>
+
+
+    <form
+        action="/signup"
+        method="POST"
+    >
+
+
+        <!-- USERNAME -->
+
+        <label>
+            Username
+        </label>
+
+        <br>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            required
+        >
+
+        <br><br>
+
+
+        <!-- EMAIL -->
+
+        <label>
+            Email
+        </label>
+
+        <br>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            required
+        >
+
+        <br><br>
+
+
+        <!-- PASSWORD -->
+
+        <label>
+            Password
+        </label>
+
+        <br>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <br><br>
+
+
+        <!-- SUBMIT -->
+
+        <button
+            type="submit"
+        >
+            Sign Up
+        </button>
+
+
+    </form>
+
+
+    <p>
+        Already have an account?
+
+        <a href="/login">
+            Login
+        </a>
+
+    </p>
+
+</body>
+
+</html>

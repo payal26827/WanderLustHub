@@ -1,13 +1,100 @@
-><% layout("layouts/boilerplate", { title: "Login" }) -%>
+<!DOCTYPE html>
+<html lang="en">
 
-<h1>Login</h1>
+<head>
 
-<form action="/login" method="POST" class="form">
-  <label>Username</label>
-  <input name="username" required>
+    <meta charset="UTF-8">
 
-  <label>Password</label>
-  <input type="password" name="password" required>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-  <button type="submit">Login</button>
-</form>
+    <title>Login</title>
+
+</head>
+
+
+<body>
+
+    <h1>Login</h1>
+
+
+    <% if (error && error.length > 0) { %>
+
+        <div style="color:red;">
+            <%= error[0] %>
+        </div>
+
+    <% } %>
+
+
+    <% if (success && success.length > 0) { %>
+
+        <div style="color:green;">
+            <%= success[0] %>
+        </div>
+
+    <% } %>
+
+
+    <form
+        action="/login"
+        method="POST"
+    >
+
+
+        <label>
+            Username
+        </label>
+
+        <br>
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            required
+        >
+
+        <br><br>
+
+
+        <label>
+            Password
+        </label>
+
+        <br>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <br><br>
+
+
+        <button
+            type="submit"
+        >
+            Login
+        </button>
+
+
+    </form>
+
+
+    <p>
+
+        Don't have an account?
+
+        <a href="/signup">
+            Sign Up
+        </a>
+
+    </p>
+
+
+</body>
+
+</html>

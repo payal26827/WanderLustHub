@@ -1,185 +1,129 @@
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/user");
 
 
-// ==============================
+// ======================================
 // SIGNUP PAGE
-// ==============================
+// ======================================
 
 exports.signupForm = (req, res) => {
 
-    res.render("users/signup");
+    console.log("GET /signup");
 
+    res.render("users/signup");
 };
 
 
-// ==============================
+// ======================================
 // SIGNUP
-// ==============================
+// ======================================
 
 exports.signup = async (req, res) => {
 
     try {
 
-        const {
-            username,
-            email,
-            password
-        } = req.body;
+        console.log("================================");
+        console.log("POST /signup RECEIVED");
+        console.log("BODY:", req.body);
+        console.log("================================");
 
 
-        // Check empty fields
+        const { username, email, password } = req.body;
 
-        if (
-            !username ||
-            !email ||
-            !password
-        ) {
+
+        // Check fields
+        if (!username || !email || !password) {
 
             req.flash(
                 "error",
                 "All fields are required."
             );
 
-            return res.redirect(
-                "/signup"
-            );
-
+            return res.redirect("/signup");
         }
 
 
-        // Clean data
+        const cleanUsername = username.trim();
 
-        const cleanUsername =
-            username.trim();
-
-        const cleanEmail =
-            email.trim().toLowerCase();
+        const cleanEmail = email.trim().toLowerCase();
 
 
         // Check existing user
+        const existing = await User.findOne({
 
-        const existing =
-            await User.findOne({
+            $or: [
 
-                $or: [
+                {
+                    username: cleanUsername
+                },
 
-                    {
-                        username:
-                            cleanUsername
-                    },
+                {
+                    email: cleanEmail
+                }
 
-                    {
-                        email:
-                            cleanEmail
-                    }
+            ]
 
-                ]
-
-            });
+        });
 
 
         if (existing) {
 
+            console.log(
+                "User already exists:",
+                existing.username
+            );
+
             req.flash(
                 "error",
                 "Username or email already exists."
             );
 
-            return res.redirect(
-                "/signup"
-            );
-
+            return res.redirect("/signup");
         }
 
 
         // Hash password
-
         const passwordHash =
-            await bcrypt.hash(
-                password,
-                12
-            );
+            await bcrypt.hash(password, 12);
 
 
         // Create user
+        const user = await User.create({
 
-        const user =
-            await User.create({
+            username: cleanUsername,
 
-                username:
-                    cleanUsername,
+            email: cleanEmail,
 
-                email:
-                    cleanEmail,
+            passwordHash: passwordHash
 
-                passwordHash:
-                    passwordHash
+        });
 
-            });
+
+        console.log(
+            "USER CREATED:",
+            user.username
+        );
 
 
         // Save user in session
-
-        req.session.userId =
-            user._id;
+        req.session.userId = user._id;
 
 
         req.flash(
             "success",
-            "Welcome! Your account was created successfully."
+            "Welcome! Your account was created."
         );
 
 
-        // IMPORTANT:
-        // Save session before redirect
+        return res.redirect("/listings");
 
-        req.session.save(
-            (err) => {
-
-                if (err) {
-
-                    console.error(
-                        "Session save error:",
-                        err
-                    );
-
-                    return res.status(500).send(
-                        "Session error"
-                    );
-
-                }
-
-                res.redirect(
-                    "/listings"
-                );
-
-            }
-        );
 
     } catch (err) {
 
         console.error(
-            "Signup Error:",
+            "SIGNUP ERROR:",
             err
         );
-
-
-        // Duplicate username/email
-
-        if (err.code === 11000) {
-
-            req.flash(
-                "error",
-                "Username or email already exists."
-            );
-
-            return res.redirect(
-                "/signup"
-            );
-
-        }
 
 
         req.flash(
@@ -187,77 +131,74 @@ exports.signup = async (req, res) => {
             "Something went wrong during signup."
         );
 
-        res.redirect(
-            "/signup"
-        );
 
+        return res.redirect("/signup");
     }
-
 };
 
 
-// ==============================
+
+// ======================================
 // LOGIN PAGE
-// ==============================
+// ======================================
 
 exports.loginForm = (req, res) => {
 
-    res.render("users/login");
+    console.log("GET /login");
 
+    res.render("users/login");
 };
 
 
-// ==============================
+
+// ======================================
 // LOGIN
-// ==============================
+// ======================================
 
 exports.login = async (req, res) => {
 
     try {
 
-        const {
-            username,
-            password
-        } = req.body;
+        console.log("================================");
+        console.log("POST /login RECEIVED");
+        console.log("BODY:", req.body);
+        console.log("================================");
 
 
-        if (
-            !username ||
-            !password
-        ) {
+        const { username, password } = req.body;
+
+
+        if (!username || !password) {
 
             req.flash(
                 "error",
                 "Username and password are required."
             );
 
-            return res.redirect(
-                "/login"
-            );
-
+            return res.redirect("/login");
         }
 
 
-        const user =
-            await User.findOne({
+        const user = await User.findOne({
 
-                username:
-                    username.trim()
+            username: username.trim()
 
-            });
+        });
 
 
         if (!user) {
+
+            console.log(
+                "USER NOT FOUND:",
+                username
+            );
 
             req.flash(
                 "error",
                 "Invalid username or password."
             );
 
-            return res.redirect(
-                "/login"
-            );
-
+            return res.redirect("/login");
         }
 
 
@@ -270,22 +211,27 @@ exports.login = async (req, res) => {
 
         if (!valid) {
 
+            console.log(
+                "WRONG PASSWORD"
+            );
+
             req.flash(
                 "error",
                 "Invalid username or password."
             );
 
-            return res.redirect(
-                "/login"
-            );
-
+            return res.redirect("/login");
         }
 
 
-        // Save user ID
+        // Login successful
+        req.session.userId = user._id;
 
-        req.session.userId =
-            user._id;
+
+        console.log(
+            "LOGIN SUCCESS:",
+            user.username
+        );
 
 
         const returnTo =
@@ -302,79 +248,59 @@ exports.login = async (req, res) => {
         );
 
 
-        // IMPORTANT:
-        // Save session before redirect
+        return res.redirect(returnTo);
 
-        req.session.save(
-            (err) => {
-
-                if (err) {
-
-                    console.error(
-                        "Session save error:",
-                        err
-                    );
-
-                    return res.status(500).send(
-                        "Session error"
-                    );
-
-                }
-
-                res.redirect(
-                    returnTo
-                );
-
-            }
-        );
 
     } catch (err) {
 
         console.error(
-            "Login Error:",
+            "LOGIN ERROR:",
             err
         );
+
 
         req.flash(
             "error",
             "Something went wrong during login."
         );
 
-        res.redirect(
-            "/login"
-        );
 
+        return res.redirect("/login");
     }
-
 };
 
 
-// ==============================
+
+// ======================================
 // LOGOUT
-// ==============================
+// ======================================
 
 exports.logout = (req, res, next) => {
 
-    req.session.destroy(
-        (err) => {
-
-            if (err) {
-
-                return next(err);
-
-            }
+    console.log("POST /logout");
 
 
-            res.clearCookie(
-                "connect.sid"
+    req.session.destroy((err) => {
+
+        if (err) {
+
+            console.error(
+                "LOGOUT ERROR:",
+                err
             );
 
-
-            res.redirect(
-                "/listings"
-            );
-
+            return next(err);
         }
-    );
 
+
+        res.clearCookie(
+            "connect.sid"
+        );
+
+
+        return res.redirect(
+            "/listings"
+        );
+
+    });
 };
