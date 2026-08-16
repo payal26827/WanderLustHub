@@ -43,6 +43,9 @@ const cookieRoutes = require("./routes/cookieRoutes");
 
 const app = express();
 
+// IMPORTANT FOR RENDER
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 8080;
 
 
@@ -427,7 +430,7 @@ async function start() {
             () => {
 
                 console.log(
-                    `Server running on http://localhost:${PORT}`
+                    `Server running on port ${PORT}`
                 );
 
             }
