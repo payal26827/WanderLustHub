@@ -118,27 +118,22 @@ app.use(
 
 
 // ==============================
-// CHECK MONGO URL
+// CHECK ENVIRONMENT VARIABLES
 // ==============================
 
 if (!process.env.MONGO_URL) {
 
     console.error(
-        "ERROR: MONGO_URL is missing in .env file"
+        "ERROR: MONGO_URL is missing"
     );
 
     process.exit(1);
 }
 
-
-// ==============================
-// CHECK SESSION SECRET
-// ==============================
-
 if (!process.env.SESSION_SECRET) {
 
     console.error(
-        "ERROR: SESSION_SECRET is missing in .env file"
+        "ERROR: SESSION_SECRET is missing"
     );
 
     process.exit(1);
@@ -182,7 +177,8 @@ app.use(
 
         store: store,
 
-        secret: process.env.SESSION_SECRET,
+        secret:
+            process.env.SESSION_SECRET,
 
         resave: false,
 
@@ -238,6 +234,7 @@ app.use(
 
 
         // Navbar search filters
+
         res.locals.filters = {
 
             category:
@@ -253,6 +250,7 @@ app.use(
                 req.query.maxPrice || ""
 
         };
+
 
         next();
 
@@ -294,28 +292,32 @@ app.get(
 // ROUTES
 // ==============================
 
-// Listing routes
+// LISTING ROUTES
+
 app.use(
     "/listings",
     listingRoutes
 );
 
 
-// Review routes
+// REVIEW ROUTES
+
 app.use(
     "/listings/:id/reviews",
     reviewRoutes
 );
 
 
-// User routes
+// USER ROUTES
+
 app.use(
     "/",
     userRoutes
 );
 
 
-// Cookie routes
+// COOKIE ROUTES
+
 app.use(
     "/cookies",
     cookieRoutes
@@ -329,6 +331,22 @@ app.use(
 app.all(
     "*splat",
     (req, res, next) => {
+
+        // DEBUG INFORMATION
+        console.log(
+            "404 REQUEST:"
+        );
+
+        console.log(
+            "METHOD:",
+            req.method
+        );
+
+        console.log(
+            "URL:",
+            req.originalUrl
+        );
+
 
         next(
             new ExpressError(
@@ -404,9 +422,7 @@ async function start() {
 
     try {
 
-        // ==========================
         // CONNECT MONGODB
-        // ==========================
 
         console.log(
             "Connecting to MongoDB..."
@@ -421,9 +437,7 @@ async function start() {
         );
 
 
-        // ==========================
         // START SERVER
-        // ==========================
 
         app.listen(
             PORT,
