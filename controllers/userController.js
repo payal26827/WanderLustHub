@@ -1,9 +1,10 @@
 const bcrypt = require("bcryptjs");
+
 const User = require("../models/user");
 
 
 // ==============================
-// SIGNUP FORM
+// SIGNUP PAGE
 // ==============================
 
 exports.signupForm = (req, res) => {
@@ -29,18 +30,27 @@ exports.signup = async (req, res) => {
 
 
         // Check empty fields
-        if (!username || !email || !password) {
+
+        if (
+            !username ||
+            !email ||
+            !password
+        ) {
 
             req.flash(
                 "error",
                 "All fields are required."
             );
 
-            return res.redirect("/signup");
+            return res.redirect(
+                "/signup"
+            );
+
         }
 
 
         // Clean data
+
         const cleanUsername =
             username.trim();
 
@@ -49,24 +59,27 @@ exports.signup = async (req, res) => {
 
 
         // Check existing user
+
         const existing =
             await User.findOne({
 
                 $or: [
+
                     {
                         username:
                             cleanUsername
                     },
+
                     {
                         email:
                             cleanEmail
                     }
+
                 ]
 
             });
 
 
-        // User already exists
         if (existing) {
 
             req.flash(
@@ -74,11 +87,15 @@ exports.signup = async (req, res) => {
                 "Username or email already exists."
             );
 
-            return res.redirect("/signup");
+            return res.redirect(
+                "/signup"
+            );
+
         }
 
 
         // Hash password
+
         const passwordHash =
             await bcrypt.hash(
                 password,
@@ -87,6 +104,7 @@ exports.signup = async (req, res) => {
 
 
         // Create user
+
         const user =
             await User.create({
 
@@ -96,55 +114,60 @@ exports.signup = async (req, res) => {
                 email:
                     cleanEmail,
 
-                passwordHash
+                passwordHash:
+                    passwordHash
 
             });
 
 
-        // Save user ID in session
+        // Save user in session
+
         req.session.userId =
             user._id;
 
 
         req.flash(
             "success",
-            "Welcome! Your account was created."
+            "Welcome! Your account was created successfully."
         );
 
 
         // IMPORTANT:
         // Save session before redirect
-        req.session.save((err) => {
 
-            if (err) {
+        req.session.save(
+            (err) => {
 
-                console.error(
-                    "Session save error:",
-                    err
+                if (err) {
+
+                    console.error(
+                        "Session save error:",
+                        err
+                    );
+
+                    return res.status(500).send(
+                        "Session error"
+                    );
+
+                }
+
+                res.redirect(
+                    "/listings"
                 );
 
-                req.flash(
-                    "error",
-                    "Login session could not be saved."
-                );
-
-                return res.redirect("/signup");
             }
-
-
-            res.redirect("/listings");
-
-        });
+        );
 
     } catch (err) {
 
         console.error(
-            "Signup error:",
+            "Signup Error:",
             err
         );
 
 
-        // MongoDB duplicate error
+        // Duplicate username/email
+
         if (err.code === 11000) {
 
             req.flash(
@@ -152,16 +175,21 @@ exports.signup = async (req, res) => {
                 "Username or email already exists."
             );
 
-            return res.redirect("/signup");
+            return res.redirect(
+                "/signup"
+            );
+
         }
 
 
         req.flash(
             "error",
-            "Something went wrong. Please try again."
+            "Something went wrong during signup."
         );
 
-        res.redirect("/signup");
+        res.redirect(
+            "/signup"
+        );
 
     }
 
@@ -169,7 +197,7 @@ exports.signup = async (req, res) => {
 
 
 // ==============================
-// LOGIN FORM
+// LOGIN PAGE
 // ==============================
 
 exports.loginForm = (req, res) => {
@@ -193,15 +221,32 @@ exports.login = async (req, res) => {
         } = req.body;
 
 
-        // Find user
+        if (
+            !username ||
+            !password
+        ) {
+
+            req.flash(
+                "error",
+                "Username and password are required."
+            );
+
+            return res.redirect(
+                "/login"
+            );
+
+        }
+
+
         const user =
             await User.findOne({
+
                 username:
                     username.trim()
+
             });
 
 
-        // User not found
         if (!user) {
 
             req.flash(
@@ -209,11 +254,13 @@ exports.login = async (req, res) => {
                 "Invalid username or password."
             );
 
-            return res.redirect("/login");
+            return res.redirect(
+                "/login"
+            );
+
         }
 
 
-        // Check password
         const valid =
             await bcrypt.compare(
                 password,
@@ -221,7 +268,6 @@ exports.login = async (req, res) => {
             );
 
 
-        // Wrong password
         if (!valid) {
 
             req.flash(
@@ -229,19 +275,23 @@ exports.login = async (req, res) => {
                 "Invalid username or password."
             );
 
-            return res.redirect("/login");
+            return res.redirect(
+                "/login"
+            );
+
         }
 
 
         // Save user ID
+
         req.session.userId =
             user._id;
 
 
-        // Redirect location
         const returnTo =
             req.session.returnTo ||
             "/listings";
+
 
         delete req.session.returnTo;
 
@@ -254,41 +304,45 @@ exports.login = async (req, res) => {
 
         // IMPORTANT:
         // Save session before redirect
-        req.session.save((err) => {
 
-            if (err) {
+        req.session.save(
+            (err) => {
 
-                console.error(
-                    "Session save error:",
-                    err
+                if (err) {
+
+                    console.error(
+                        "Session save error:",
+                        err
+                    );
+
+                    return res.status(500).send(
+                        "Session error"
+                    );
+
+                }
+
+                res.redirect(
+                    returnTo
                 );
 
-                req.flash(
-                    "error",
-                    "Login session could not be saved."
-                );
-
-                return res.redirect("/login");
             }
-
-
-            res.redirect(returnTo);
-
-        });
+        );
 
     } catch (err) {
 
         console.error(
-            "Login error:",
+            "Login Error:",
             err
         );
 
         req.flash(
             "error",
-            "Something went wrong. Please try again."
+            "Something went wrong during login."
         );
 
-        res.redirect("/login");
+        res.redirect(
+            "/login"
+        );
 
     }
 
@@ -301,24 +355,26 @@ exports.login = async (req, res) => {
 
 exports.logout = (req, res, next) => {
 
-    req.session.destroy((err) => {
+    req.session.destroy(
+        (err) => {
 
-        if (err) {
+            if (err) {
 
-            return next(err);
+                return next(err);
+
+            }
+
+
+            res.clearCookie(
+                "connect.sid"
+            );
+
+
+            res.redirect(
+                "/listings"
+            );
 
         }
-
-
-        res.clearCookie(
-            "connect.sid"
-        );
-
-
-        res.redirect(
-            "/listings"
-        );
-
-    });
+    );
 
 };

@@ -4,7 +4,6 @@
 
 const dns = require("dns");
 
-// Force Node.js to use Google DNS
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 require("dotenv").config();
@@ -43,10 +42,11 @@ const cookieRoutes = require("./routes/cookieRoutes");
 
 const app = express();
 
+const PORT = process.env.PORT || 8080;
+
+
 // IMPORTANT FOR RENDER
 app.set("trust proxy", 1);
-
-const PORT = process.env.PORT || 8080;
 
 
 // ==============================
@@ -118,7 +118,7 @@ app.use(
 
 
 // ==============================
-// CHECK ENVIRONMENT VARIABLES
+// CHECK ENV VARIABLES
 // ==============================
 
 if (!process.env.MONGO_URL) {
@@ -177,8 +177,7 @@ app.use(
 
         store: store,
 
-        secret:
-            process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET,
 
         resave: false,
 
@@ -197,6 +196,7 @@ app.use(
 
             sameSite: "lax",
 
+            // Render HTTPS
             secure:
                 process.env.NODE_ENV === "production"
 
@@ -233,8 +233,6 @@ app.use(
             req.session.taxMode || false;
 
 
-        // Navbar search filters
-
         res.locals.filters = {
 
             category:
@@ -250,7 +248,6 @@ app.use(
                 req.query.maxPrice || ""
 
         };
-
 
         next();
 
@@ -292,32 +289,28 @@ app.get(
 // ROUTES
 // ==============================
 
-// LISTING ROUTES
-
+// Listings
 app.use(
     "/listings",
     listingRoutes
 );
 
 
-// REVIEW ROUTES
-
+// Reviews
 app.use(
     "/listings/:id/reviews",
     reviewRoutes
 );
 
 
-// USER ROUTES
-
+// Users
 app.use(
     "/",
     userRoutes
 );
 
 
-// COOKIE ROUTES
-
+// Cookies
 app.use(
     "/cookies",
     cookieRoutes
@@ -331,22 +324,6 @@ app.use(
 app.all(
     "*splat",
     (req, res, next) => {
-
-        // DEBUG INFORMATION
-        console.log(
-            "404 REQUEST:"
-        );
-
-        console.log(
-            "METHOD:",
-            req.method
-        );
-
-        console.log(
-            "URL:",
-            req.originalUrl
-        );
-
 
         next(
             new ExpressError(
@@ -422,8 +399,6 @@ async function start() {
 
     try {
 
-        // CONNECT MONGODB
-
         console.log(
             "Connecting to MongoDB..."
         );
@@ -437,10 +412,9 @@ async function start() {
         );
 
 
-        // START SERVER
-
         app.listen(
             PORT,
+            "0.0.0.0",
             () => {
 
                 console.log(
